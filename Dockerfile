@@ -52,7 +52,6 @@ RUN mkdir -p /workspace/outputs && \
 
 # Start Scripts
 COPY pre_start.sh /pre_start.sh
-COPY start.sh /start.sh
 RUN chmod +x /pre_start.sh /start.sh
 
 CMD [ "/start.sh" ]
