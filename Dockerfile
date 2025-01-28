@@ -28,7 +28,7 @@ RUN /workspace/venv/bin/pip install --upgrade pip
 # Install necessary Python packages
 RUN /workspace/venv/bin/pip install --upgrade --no-cache-dir setuptools wheel
 
-# Install PyTorch with CUDA 12.4 support (latest stable version)
+# Install PyTorch with CUDA 12.4 support
 RUN /workspace/venv/bin/pip install --upgrade --no-cache-dir torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu124
 
 # Install ComfyUI and its manager
