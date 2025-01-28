@@ -1,8 +1,8 @@
-FROM runpod/base:0.6.2-cuda12.4.1 AS base
+FROM runpod/base:0.6.2-cuda12.6.2 AS base
 
 WORKDIR /workspace
 
-# Install Python 3.12.7 using deadsnakes PPA
+# Install Python 3.12 using deadsnakes PPA
 RUN apt-get update && apt-get install -y software-properties-common \
     && add-apt-repository -y ppa:deadsnakes/ppa \
     && apt-get update \
@@ -28,8 +28,8 @@ RUN /workspace/venv/bin/pip install --upgrade pip
 # Install necessary Python packages
 RUN /workspace/venv/bin/pip install --upgrade --no-cache-dir setuptools wheel
 
-# Install PyTorch with CUDA 12.4 support
-RUN /workspace/venv/bin/pip install --upgrade --no-cache-dir torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu124
+# Install PyTorch with CUDA 12.6 support
+RUN /workspace/venv/bin/pip install --upgrade --no-cache-dir torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu126
 
 # Install ComfyUI and its manager
 RUN git clone https://github.com/comfyanonymous/ComfyUI.git && \
@@ -40,18 +40,16 @@ RUN git clone https://github.com/comfyanonymous/ComfyUI.git && \
     /workspace/venv/bin/pip install -r requirements.txt
 
 RUN /workspace/venv/bin/pip install --upgrade huggingface_hub
-
-# Download models
-# RUN wget --progress=bar:force:noscroll "https://civitai.com/api/download/models/782002?type=Model&format=SafeTensor&size=full&fp=fp16" -O /workspace/ComfyUI/models/checkpoints/juggernaut.safetensors
-# RUN wget --progress=bar:force:noscroll "https://civitai.com/api/download/models/90072?type=Model&format=SafeTensor&size=pruned&fp=fp16" -O /workspace/ComfyUI/models/checkpoints/photon.safetensors
-# RUN wget --progress=bar:force:noscroll "https://huggingface.co/Comfy-Org/flux1-dev/blob/main/flux1-dev-fp8.safetensors" -O /workspace/ComfyUI/models/checkpoints/flux1-dev-fp8.safetensors
+RUN /workspace/venv/bin/pip install hf_transfer
+RUN /workspace/venv/bin/pip install aiohttp
 
 # Create necessary directories
-RUN mkdir -p /workspace/outputs && \
-    chmod -R 777 /workspace/outputs
+RUN mkdir -p /workspace/outputs /workspace/scripts && \
+    chmod -R 777 /workspace/outputs /workspace/scripts
 
-# Start Scripts
+# Copy scripts
 COPY pre_start.sh /pre_start.sh
+COPY models/ /workspace/scripts/
 RUN chmod +x /pre_start.sh /start.sh
 
 CMD [ "/start.sh" ]

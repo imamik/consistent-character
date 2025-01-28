@@ -1,0 +1,6 @@
+{
+    "models/checkpoints/juggernaut.safetensors": "https://civitai.com/api/download/models/782002?type=Model&format=SafeTensor&size=full&fp=16",
+    "models/checkpoints/photon.safetensors": "https://civitai.com/api/download/models/90072?type=Model&format=SafeTensor&size=pruned&fp=16",
+    "models/upscalers/4x-ClearRealityV1_Soft.safetensors": "https://mega.nz/folder/Xc4wnC7T#yUS5-9-AbRxLhpdPW_8f2w/file/PVR3lL7J",
+    "models/upscalers/4x-ClearRealityV1.safetensors": "https://mega.nz/folder/Xc4wnC7T#yUS5-9-AbRxLhpdPW_8f2w/file/fQJ3wDAT"
+}
