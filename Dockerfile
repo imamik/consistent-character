@@ -42,8 +42,8 @@ RUN git clone https://github.com/comfyanonymous/ComfyUI.git && \
 RUN /workspace/venv/bin/pip install --upgrade huggingface_hub
 
 # Download models
-RUN wget --progress=bar:force:noscroll "https://civitai.com/api/download/models/782002?type=Model&format=SafeTensor&size=full&fp=fp16" -O /workspace/ComfyUI/models/checkpoints/juggernaut.safetensors
-RUN wget --progress=bar:force:noscroll "https://civitai.com/api/download/models/90072?type=Model&format=SafeTensor&size=pruned&fp=fp16" -O /workspace/ComfyUI/models/checkpoints/photon.safetensors
+# RUN wget --progress=bar:force:noscroll "https://civitai.com/api/download/models/782002?type=Model&format=SafeTensor&size=full&fp=fp16" -O /workspace/ComfyUI/models/checkpoints/juggernaut.safetensors
+# RUN wget --progress=bar:force:noscroll "https://civitai.com/api/download/models/90072?type=Model&format=SafeTensor&size=pruned&fp=fp16" -O /workspace/ComfyUI/models/checkpoints/photon.safetensors
 # RUN wget --progress=bar:force:noscroll "https://huggingface.co/Comfy-Org/flux1-dev/blob/main/flux1-dev-fp8.safetensors" -O /workspace/ComfyUI/models/checkpoints/flux1-dev-fp8.safetensors
 
 # Create necessary directories

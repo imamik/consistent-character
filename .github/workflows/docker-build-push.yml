@@ -12,7 +12,7 @@ env:
 
 jobs:
   build-and-push:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     permissions:
       contents: read
       packages: write
@@ -27,6 +27,7 @@ jobs:
         with:
           driver-opts: |
             image=moby/buildkit:latest
+          buildkitd-flags: --debug
 
       # Log in to registry
       - name: Log in to the Container registry
@@ -60,14 +61,9 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           platforms: linux/amd64
-          # Improved caching strategy
-          cache-from: |
-            type=gha,scope=${{ github.ref_name }}
-            type=registry,ref=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:buildcache
-          cache-to: |
-            type=gha,mode=max,scope=${{ github.ref_name }}
-            type=registry,ref=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:buildcache,mode=max
+          # Disable caching to save space
+          no-cache: true
           # Build arguments
           build-args: |
             BUILDKIT_INLINE_CACHE=1
-          provenance: false 
+          provenance: false
