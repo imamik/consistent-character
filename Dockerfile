@@ -3,7 +3,7 @@ FROM runpod/base:0.6.2-cuda12.6.2 AS base
 WORKDIR /workspace
 
 # Create necessary directories
-RUN mkdir -p /workspace/outputs /workspace/scripts /workspace/ComfyUI/user/default/ComfyUI-Manager/snapshots/ && \
+RUN mkdir -p /workspace/outputs /workspace/scripts && \
     chmod -R 777 /workspace/outputs /workspace/scripts
 
 # Consolidated system package installation with deadsnakes PPA
