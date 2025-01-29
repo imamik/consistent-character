@@ -26,24 +26,37 @@ RUN python3.12 -m venv /workspace/venv && \
 
 # Set environment variable for venv
 ENV PATH="/workspace/venv/bin:$PATH"
+ENV CUDA_HOME="/usr/local/cuda"
+ENV TORCH_CUDA_ARCH_LIST="7.5;8.0;8.6;8.9;9.0"
 
-# PyTorch installation with force-reinstall
-RUN /workspace/venv/bin/pip install --upgrade --no-cache-dir --force-reinstall \
-    torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
-
-# Other ML-related package installation
+# Install PyTorch and related packages with specific versions
 RUN /workspace/venv/bin/pip install --no-cache-dir \
-    facexlib \
-    onnxruntime-gpu \
-    huggingface_hub \
-    hf_transfer \
+    torch==2.1.2 \
+    torchvision==0.16.2 \
+    torchaudio==2.1.2 \
+    --index-url https://download.pytorch.org/whl/cu121
+
+# Install huggingface hub first to ensure correct version
+RUN /workspace/venv/bin/pip install --no-cache-dir \
+    huggingface_hub==0.19.4 \
+    hf_transfer
+
+# Install diffusers and related packages
+RUN /workspace/venv/bin/pip install --no-cache-dir \
+    diffusers==0.24.0 \
+    transformers==4.36.2 \
+    accelerate==0.25.0
+
+# Install onnxruntime and other ML packages
+RUN /workspace/venv/bin/pip install --no-cache-dir \
+    onnxruntime-gpu==1.16.3 \
+    insightface==0.7.3 \
+    facexlib==0.3.0 \
     typer \
     rich \
-    typing_extensions \
-    streamdiffusion \
-    insightface
+    typing_extensions
 
-# ComfyUI and manager installation
+# Install ComfyUI and manager
 RUN git clone https://github.com/comfyanonymous/ComfyUI.git && \
     cd ComfyUI && \
     /workspace/venv/bin/pip install -r requirements.txt && \
@@ -51,17 +64,27 @@ RUN git clone https://github.com/comfyanonymous/ComfyUI.git && \
     cd custom_nodes/ComfyUI-Manager && \
     /workspace/venv/bin/pip install -r requirements.txt
 
+# Create ComfyUI-Manager config
+RUN echo '[default]\nwindows_selector_event_loop_policy = True\nbypass_ssl = True\nfile_logging = True\ndowngrade_blacklist = diffusers, kornia, torch, torchaudio, torchvision' > /workspace/ComfyUI/custom_nodes/ComfyUI-Manager/config.ini
+
 # Copy files (grouped together)
-COPY snapshot.json /workspace/ComfyUI/user/default/ComfyUI-Manager/snapshots/
+COPY snapshots/ /workspace/ComfyUI/user/default/ComfyUI-Manager/snapshots/
 COPY scripts/pre_start.sh /pre_start.sh
 COPY ClearRealityUpscaler/*.pth /workspace/ComfyUI/models/upscale_models/
 COPY scripts/ /workspace/scripts/
-COPY OpenPose-T-Pose.png /workspace/ComfyUI/input/OpenPose-T-Pose.png
-COPY IMAMIK_CC_SDXL.json /workspace/ComfyUI/user/default/workflows/IMAMIK_CC_SDXL.json
+COPY input/ /workspace/ComfyUI/input/
+COPY workflows/ /workspace/ComfyUI/user/default/workflows/
 
 # Set permissions (grouped together)
 RUN chmod 644 /workspace/ComfyUI/models/upscale_models/*.pth && \
     chmod +x /workspace/scripts/*.sh && \
     chmod +x /pre_start.sh
+
+# Download InsightFace model
+RUN mkdir -p /workspace/ComfyUI/models/insightface/models && \
+    cd /workspace/ComfyUI/models/insightface/models && \
+    wget https://github.com/deepinsight/insightface/releases/download/v0.7/antelopev2.zip && \
+    unzip antelopev2.zip && \
+    rm antelopev2.zip
 
 CMD [ "/start.sh" ]
