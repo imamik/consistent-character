@@ -53,5 +53,6 @@ COPY scripts/ /workspace/scripts/
 
 # Make scripts executable
 RUN chmod +x /workspace/scripts/*.sh
+RUN chmod +x /pre_start.sh
 
 CMD [ "/start.sh" ]
