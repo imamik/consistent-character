@@ -1,0 +1,50 @@
+name: Tag Release
+
+on:
+  push:
+    tags:
+      - 'v[0-9]+.[0-9]+.[0-9]+'
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  tag-release:
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Log in to the Container registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      # Get the SHA of the commit that was tagged
+      - name: Get tagged commit SHA
+        id: get-sha
+        run: |
+          TAG_NAME=${GITHUB_REF#refs/tags/}
+          echo "tag=${TAG_NAME}" >> $GITHUB_OUTPUT
+
+      # Tag the existing image with the version tag
+      - name: Tag release
+        run: |
+          # Get the latest SHA-based image
+          LATEST_SHA=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            "https://api.github.com/repos/${{ github.repository }}/commits/main" | \
+            jq -r '.sha')
+          
+          # Pull the existing image
+          docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:sha-${LATEST_SHA}
+          
+          # Tag with the version
+          docker tag ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:sha-${LATEST_SHA} \
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.get-sha.outputs.tag }}
+          
+          # Push the new tag
+          docker push ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.get-sha.outputs.tag }} 

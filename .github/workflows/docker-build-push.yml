@@ -61,8 +61,8 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           platforms: linux/amd64
-          # Disable caching to save space
-          no-cache: true
+          cache-from: type=gha,scope=${{ github.workflow }}
+          cache-to: type=gha,mode=max,scope=${{ github.workflow }}
           # Build arguments
           build-args: |
             BUILDKIT_INLINE_CACHE=1
