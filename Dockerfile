@@ -41,7 +41,14 @@ RUN git clone https://github.com/comfyanonymous/ComfyUI.git && \
 
 RUN /workspace/venv/bin/pip install --upgrade huggingface_hub
 RUN /workspace/venv/bin/pip install hf_transfer
-RUN /workspace/venv/bin/pip install aiohttp
+
+# Copy ComfyUI Manager snapshot
+RUN mkdir -p /workspace/ComfyUI/user/default/ComfyUI-Manager/snapshots/
+COPY 2025-01-29_07-58-54_snapshot.json /workspace/ComfyUI/user/default/ComfyUI-Manager/snapshots/
+
+# Restore the state of the snapshot with the manager using cm-cli
+RUN cd /workspace/ComfyUI/custom_nodes/ComfyUI-Manager && \
+    /workspace/venv/bin/python cm-cli.py restore /workspace/ComfyUI/user/default/ComfyUI-Manager/snapshots/2025-01-29_07-58-54_snapshot.json
 
 # Create necessary directories
 RUN mkdir -p /workspace/outputs /workspace/scripts && \
