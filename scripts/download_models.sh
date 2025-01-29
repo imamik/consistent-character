@@ -52,6 +52,11 @@ download_model \
     "https://huggingface.co/xinsir/controlnet-union-sdxl-1.0/resolve/main/diffusion_pytorch_model_promax.safetensors" \
     "$WORKSPACE_PATH/models/controlnet/SDXL/controlnet-union-sdxl-1.0/diffusion_pytorch_model_promax.safetensors"
 
+# OpenPoseXL2 ControlNet
+download_model \
+    "https://huggingface.co/thibaud/controlnet-openpose-sdxl-1.0/resolve/main/OpenPoseXL2.safetensors" \
+    "$WORKSPACE_PATH/models/controlnet/OpenPoseXL2.safetensors"
+
 # IC-Light Model
 download_model \
     "https://huggingface.co/lllyasviel/ic-light/resolve/main/iclight_sd15_fbc.safetensors" \

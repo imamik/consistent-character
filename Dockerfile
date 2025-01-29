@@ -1,4 +1,4 @@
-FROM runpod/base:0.6.2-cuda12.4.1 AS base
+FROM runpod/base:0.6.2-cuda12.6.2 AS base
 
 WORKDIR /workspace
 
@@ -31,30 +31,30 @@ ENV TORCH_CUDA_ARCH_LIST="7.5;8.0;8.6;8.9;9.0"
 
 # Install PyTorch and related packages with specific versions
 RUN /workspace/venv/bin/pip install --no-cache-dir \
-    torch==2.2.0 \
-    torchvision==0.17.0 \
-    torchaudio==2.2.0 \
-    --index-url https://download.pytorch.org/whl/cu124
+    torch>=2.3.1 \
+    torchvision>=0.18.1 \
+    torchaudio>=2.3.1 \
+    --index-url https://download.pytorch.org/whl/cu126
 
 # Install huggingface hub first to ensure correct version
 RUN /workspace/venv/bin/pip install --no-cache-dir \
-    huggingface_hub==0.19.4 \
-    hf_transfer
+    huggingface_hub>=0.21.4 \
+    hf_transfer>=0.1.5
 
 # Install diffusers and related packages
 RUN /workspace/venv/bin/pip install --no-cache-dir \
-    diffusers==0.24.0 \
-    transformers==4.36.2 \
-    accelerate==0.25.0
+    diffusers>=0.27.2 \
+    transformers>=4.38.2 \
+    accelerate>=0.27.2
 
 # Install onnxruntime and other ML packages
 RUN /workspace/venv/bin/pip install --no-cache-dir \
-    onnxruntime-gpu==1.17.0 \
-    insightface==0.7.3 \
-    facexlib==0.3.0 \
-    typer \
-    rich \
-    typing_extensions
+    onnxruntime-gpu>=1.17.1 \
+    insightface>=0.7.3 \
+    facexlib>=0.3.0 \
+    typer>=0.9.0 \
+    rich>=13.7.1 \
+    typing_extensions>=4.10.0
 
 # Install ComfyUI and manager
 RUN git clone https://github.com/comfyanonymous/ComfyUI.git && \
@@ -84,7 +84,8 @@ RUN chmod 644 /workspace/ComfyUI/models/upscale_models/*.pth && \
 RUN mkdir -p /workspace/ComfyUI/models/insightface/models && \
     cd /workspace/ComfyUI/models/insightface/models && \
     wget https://github.com/deepinsight/insightface/releases/download/v0.7/antelopev2.zip && \
-    unzip antelopev2.zip && \
-    rm antelopev2.zip
+    unzip -o antelopev2.zip && \
+    rm antelopev2.zip && \
+    chmod -R 755 /workspace/ComfyUI/models/insightface
 
 CMD [ "/start.sh" ]
