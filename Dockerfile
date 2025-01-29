@@ -48,8 +48,8 @@ RUN mkdir -p /workspace/ComfyUI/user/default/ComfyUI-Manager/snapshots/
 COPY 2025-01-29_07-58-54_snapshot.json /workspace/ComfyUI/user/default/ComfyUI-Manager/snapshots/
 
 # Restore the state of the snapshot with the manager using cm-cli
-RUN cd /workspace/ComfyUI/custom_nodes/ComfyUI-Manager && \
-    /workspace/venv/bin/python cm-cli.py restore-snapshot /workspace/ComfyUI/user/default/ComfyUI-Manager/snapshots/2025-01-29_07-58-54_snapshot.json || exit 1
+# RUN cd /workspace/ComfyUI/custom_nodes/ComfyUI-Manager && \
+#     /workspace/venv/bin/python cm-cli.py restore-snapshot /workspace/ComfyUI/user/default/ComfyUI-Manager/snapshots/2025-01-29_07-58-54_snapshot.json || exit 1
 
 # Create necessary directories
 RUN mkdir -p /workspace/outputs /workspace/scripts && \
