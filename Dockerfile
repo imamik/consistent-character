@@ -41,12 +41,28 @@ RUN pip install --upgrade --no-cache-dir pip && \
 RUN pip install --upgrade --no-cache-dir torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu124
 
 # Install ComfyUI and ComfyUI Manager
-RUN git clone https://github.com/comfyanonymous/ComfyUI.git && \
-    cd /ComfyUI && \
-    pip install -r requirements.txt
-RUN git clone https://github.com/ltdrdata/ComfyUI-Manager.git custom_nodes/ComfyUI-Manager && \
+RUN cd /workspace && \
+    git clone https://github.com/comfyanonymous/ComfyUI.git && \
+    cd /workspace/ComfyUI && \
+    pip install -r requirements.txt && \
+    git clone https://github.com/ltdrdata/ComfyUI-Manager.git custom_nodes/ComfyUI-Manager && \
     cd custom_nodes/ComfyUI-Manager && \
     pip install -r requirements.txt
+
+# Install Filebrowser
+# Create a non-root user for brew install
+RUN useradd -m brewuser && \
+    echo "brewuser ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
+# Switch to the non-root user
+USER brewuser
+RUN /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+ENV PATH="/home/linuxbrew/.linuxbrew/bin:${PATH}"
+RUN brew update && brew install pyenv
+RUN brew tap filebrowser/tap && brew install filebrowser
+# Temporary while bash path gets fixed https://github.com/astral-sh/uv/issues/1586
+RUN brew install uv
+# Switch back to root 
+USER root
 
 # NGINX Proxy
 COPY proxy/nginx.conf /etc/nginx/nginx.conf
