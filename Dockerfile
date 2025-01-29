@@ -1,4 +1,4 @@
-FROM runpod/base:0.6.2-cuda12.1.0 AS base
+FROM runpod/base:0.6.2-cuda12.4.1 AS base
 
 WORKDIR /workspace
 
@@ -31,10 +31,10 @@ ENV TORCH_CUDA_ARCH_LIST="7.5;8.0;8.6;8.9;9.0"
 
 # Install PyTorch and related packages with specific versions
 RUN /workspace/venv/bin/pip install --no-cache-dir \
-    torch==2.1.2 \
-    torchvision==0.16.2 \
-    torchaudio==2.1.2 \
-    --index-url https://download.pytorch.org/whl/cu121
+    torch==2.2.0 \
+    torchvision==0.17.0 \
+    torchaudio==2.2.0 \
+    --index-url https://download.pytorch.org/whl/cu124
 
 # Install huggingface hub first to ensure correct version
 RUN /workspace/venv/bin/pip install --no-cache-dir \
@@ -49,7 +49,7 @@ RUN /workspace/venv/bin/pip install --no-cache-dir \
 
 # Install onnxruntime and other ML packages
 RUN /workspace/venv/bin/pip install --no-cache-dir \
-    onnxruntime-gpu==1.16.3 \
+    onnxruntime-gpu==1.17.0 \
     insightface==0.7.3 \
     facexlib==0.3.0 \
     typer \
