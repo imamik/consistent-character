@@ -57,6 +57,11 @@ RUN mkdir -p /workspace/outputs /workspace/scripts && \
 
 # Copy scripts
 COPY scripts/pre_start.sh /pre_start.sh
+
+# Copy ClearReality upscaler models
+COPY ClearRealityUpscaler/*.pth /workspace/ComfyUI/models/upscale_models/
+RUN chmod 644 /workspace/ComfyUI/models/upscale_models/*.pth
+
 COPY scripts/ /workspace/scripts/
 
 # Make scripts executable
