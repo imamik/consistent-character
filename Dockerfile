@@ -12,7 +12,8 @@ WORKDIR /
 # Set up system
 RUN apt-get update --yes && \
     apt-get upgrade --yes && \
-    apt install --yes --no-install-recommends git wget curl bash libgl1 software-properties-common openssh-server nginx rsync && \
+    apt install --yes --no-install-recommends git wget curl bash libgl1 software-properties-common openssh-server nginx rsync \
+    build-essential gcc g++ && \
     add-apt-repository ppa:deadsnakes/ppa && \
     apt-get install -y --no-install-recommends \
     python3.12 \
@@ -60,8 +61,8 @@ RUN useradd -m brewuser && \
 USER brewuser
 RUN /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 ENV PATH="/home/linuxbrew/.linuxbrew/bin:${PATH}"
-RUN brew update && brew install pyenv
-RUN brew tap filebrowser/tap && brew install filebrowser
+RUN brew update && brew install gcc && brew install pyenv
+RUN brew tap filebrowser/tap && HOMEBREW_NO_INSTALLED_DEPENDENTS_CHECK=1 brew install filebrowser
 # Temporary while bash path gets fixed https://github.com/astral-sh/uv/issues/1586
 RUN brew install uv
 # Switch back to root 
