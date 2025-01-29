@@ -1,92 +1,62 @@
-FROM runpod/base:0.6.2-cuda12.6.2 AS base
+FROM nvidia/cuda:12.4.1-base-ubuntu20.04 AS base
 
-WORKDIR /workspace
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
-# Create necessary directories
-RUN mkdir -p /workspace/outputs /workspace/scripts && \
-    chmod -R 777 /workspace/outputs /workspace/scripts
+# Set working directory and environment variables
+ENV SHELL=/bin/bash
+ENV PYTHONUNBUFFERED=1
+ENV DEBIAN_FRONTEND=noninteractive
 
-# Consolidated system package installation with deadsnakes PPA
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    software-properties-common && \
-    add-apt-repository -y ppa:deadsnakes/ppa && \
-    apt-get update && \
+WORKDIR /
+
+# Set up system
+RUN apt-get update --yes && \
+    apt-get upgrade --yes && \
+    apt install --yes --no-install-recommends git wget curl bash libgl1 software-properties-common openssh-server nginx rsync && \
+    add-apt-repository ppa:deadsnakes/ppa && \
     apt-get install -y --no-install-recommends \
     python3.12 \
     python3.12-venv \
     python3.12-dev && \
+    apt-get autoremove -y && \
+    apt-get clean && \
     rm -rf /var/lib/apt/lists/* && \
-    curl -sS https://bootstrap.pypa.io/get-pip.py | python3.12 && \
-    update-alternatives --install /usr/local/bin/python python /usr/bin/python3.12 1 && \
-    update-alternatives --install /usr/local/bin/python3 python3 /usr/bin/python3.12 1
+    echo "en_US.UTF-8 UTF-8" > /etc/locale.gen
 
-# Virtual environment setup
-RUN python3.12 -m venv /workspace/venv && \
-    /workspace/venv/bin/pip install --upgrade pip setuptools wheel
+# Set up Python and pip
+RUN ln -s /usr/bin/python3.12 /usr/bin/python && \
+    rm /usr/bin/python3 && \
+    ln -s /usr/bin/python3.12 /usr/bin/python3 && \
+    curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py && \
+    python get-pip.py
 
-# Set environment variable for venv
-ENV PATH="/workspace/venv/bin:$PATH"
-ENV CUDA_HOME="/usr/local/cuda"
-ENV TORCH_CUDA_ARCH_LIST="7.5;8.0;8.6;8.9;9.0"
 
-# Install PyTorch ecosystem with specific versions to ensure compatibility
-RUN /workspace/venv/bin/pip install --no-cache-dir \
-    torch==2.6.0 \
-    torchvision==0.21.0 \
-    torchaudio==2.6.0 \
-    --index-url https://download.pytorch.org/whl/nightly/cu126
+RUN python -m venv /venv
+ENV PATH="/venv/bin:$PATH"
 
-# Install huggingface hub and transfer
-RUN /workspace/venv/bin/pip install --no-cache-dir \
-    huggingface_hub>=0.21.4 \
-    hf_transfer>=0.1.5
+# Install necessary Python packages
+RUN pip install --upgrade --no-cache-dir pip && \
+    pip install --upgrade setuptools && \
+    pip install --upgrade wheel
+RUN pip install --upgrade --no-cache-dir torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu124
 
-# Install diffusers and related packages with specific versions
-RUN /workspace/venv/bin/pip install --no-cache-dir \
-    diffusers==0.28.0 \
-    transformers>=4.38.2 \
-    accelerate>=0.27.2
-
-# Install onnxruntime and other ML packages with specific versions
-RUN /workspace/venv/bin/pip install --no-cache-dir \
-    onnxruntime-gpu==1.18.0 \
-    insightface>=0.7.3 \
-    facexlib>=0.3.0 \
-    typer>=0.9.0 \
-    rich>=13.7.1 \
-    typing_extensions>=4.10.0 \
-    protobuf==3.20.2
-
-# Install ComfyUI and manager
+# Install ComfyUI and ComfyUI Manager
 RUN git clone https://github.com/comfyanonymous/ComfyUI.git && \
-    cd ComfyUI && \
-    /workspace/venv/bin/pip install -r requirements.txt && \
-    git clone https://github.com/ltdrdata/ComfyUI-Manager.git custom_nodes/ComfyUI-Manager && \
+    cd /ComfyUI && \
+    pip install -r requirements.txt
+RUN git clone https://github.com/ltdrdata/ComfyUI-Manager.git custom_nodes/ComfyUI-Manager && \
     cd custom_nodes/ComfyUI-Manager && \
-    /workspace/venv/bin/pip install -r requirements.txt
+    pip install -r requirements.txt
 
-# Create ComfyUI-Manager config
-RUN echo '[default]\nwindows_selector_event_loop_policy = True\nbypass_ssl = True\nfile_logging = True\ndowngrade_blacklist = diffusers, kornia, torch, torchaudio, torchvision' > /workspace/ComfyUI/custom_nodes/ComfyUI-Manager/config.ini
+# NGINX Proxy
+COPY proxy/nginx.conf /etc/nginx/nginx.conf
+COPY proxy/readme.html /usr/share/nginx/html/readme.html
 
-# Copy files (grouped together)
-COPY snapshots/ /workspace/ComfyUI/user/default/ComfyUI-Manager/snapshots/
-COPY scripts/pre_start.sh /pre_start.sh
-COPY ClearRealityUpscaler/*.pth /workspace/ComfyUI/models/upscale_models/
-COPY scripts/ /workspace/scripts/
-COPY input/ /workspace/ComfyUI/input/
-COPY workflows/ /workspace/ComfyUI/user/default/workflows/
+# Copy the README.md
+COPY README.md /usr/share/nginx/html/README.md
 
-# Set permissions (grouped together)
-RUN chmod 644 /workspace/ComfyUI/models/upscale_models/*.pth && \
-    chmod +x /workspace/scripts/*.sh && \
-    chmod +x /pre_start.sh
-
-# Download InsightFace model
-RUN mkdir -p /workspace/ComfyUI/models/insightface/models && \
-    cd /workspace/ComfyUI/models/insightface/models && \
-    wget https://github.com/deepinsight/insightface/releases/download/v0.7/antelopev2.zip && \
-    unzip -o antelopev2.zip && \
-    rm antelopev2.zip && \
-    chmod -R 755 /workspace/ComfyUI/models/insightface
+# Start Scripts
+COPY scripts/ /
+RUN chmod +x /start.sh /pre_start.sh /download_models.sh
 
 CMD [ "/start.sh" ]
