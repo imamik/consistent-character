@@ -71,8 +71,7 @@ COPY proxy/readme.html /usr/share/nginx/html/readme.html
 COPY README.md /usr/share/nginx/html/README.md
 
 # Copy the ComfyUI data
-COPY models/ /workspace/ComfyUI/models/
-COPY input/ /workspace/ComfyUI/input/
+COPY ComfyUI/ /workspace/ComfyUI/
 
 # Start Scripts
 COPY scripts/ /
