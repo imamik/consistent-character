@@ -56,6 +56,8 @@ COPY snapshot.json /workspace/ComfyUI/user/default/ComfyUI-Manager/snapshots/
 COPY scripts/pre_start.sh /pre_start.sh
 COPY ClearRealityUpscaler/*.pth /workspace/ComfyUI/models/upscale_models/
 COPY scripts/ /workspace/scripts/
+COPY OpenPose-T-Pose.png /workspace/ComfyUI/input/OpenPose-T-Pose.png
+COPY IMAMIK_CC_SDXL.json /workspace/ComfyUI/user/default/workflows/IMAMIK_CC_SDXL.json
 
 # Set permissions (grouped together)
 RUN chmod 644 /workspace/ComfyUI/models/upscale_models/*.pth && \
