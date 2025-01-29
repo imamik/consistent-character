@@ -1,4 +1,4 @@
-FROM runpod/base:0.6.2-cuda12.6.2 AS base
+FROM runpod/base:runpod/base:0.6.2-cuda12.1.0 AS base
 
 WORKDIR /workspace
 
@@ -28,8 +28,8 @@ RUN /workspace/venv/bin/pip install --upgrade pip
 # Install necessary Python packages
 RUN /workspace/venv/bin/pip install --upgrade --no-cache-dir setuptools wheel
 
-# Install PyTorch with CUDA 12.6 support
-RUN /workspace/venv/bin/pip install --upgrade --no-cache-dir torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu126
+# Install PyTorch with CUDA 12.1 support
+RUN /workspace/venv/bin/pip install --upgrade --no-cache-dir torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
 
 # Install ComfyUI and its manager
 RUN git clone https://github.com/comfyanonymous/ComfyUI.git && \
@@ -48,8 +48,10 @@ RUN mkdir -p /workspace/outputs /workspace/scripts && \
     chmod -R 777 /workspace/outputs /workspace/scripts
 
 # Copy scripts
-COPY pre_start.sh /pre_start.sh
-COPY models/ /workspace/scripts/
-RUN chmod +x /pre_start.sh /start.sh
+COPY scripts/pre_start.sh /pre_start.sh
+COPY scripts/ /workspace/scripts/
+
+# Make scripts executable
+RUN chmod +x /workspace/scripts/*.sh
 
 CMD [ "/start.sh" ]
