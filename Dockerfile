@@ -29,32 +29,33 @@ ENV PATH="/workspace/venv/bin:$PATH"
 ENV CUDA_HOME="/usr/local/cuda"
 ENV TORCH_CUDA_ARCH_LIST="7.5;8.0;8.6;8.9;9.0"
 
-# Install PyTorch and related packages with specific versions
+# Install PyTorch ecosystem with specific versions to ensure compatibility
 RUN /workspace/venv/bin/pip install --no-cache-dir \
-    torch>=2.3.1 \
-    torchvision>=0.18.1 \
-    torchaudio>=2.3.1 \
-    --index-url https://download.pytorch.org/whl/cu126
+    torch==2.6.0 \
+    torchvision==0.21.0 \
+    torchaudio==2.6.0 \
+    --index-url https://download.pytorch.org/whl/nightly/cu126
 
-# Install huggingface hub first to ensure correct version
+# Install huggingface hub and transfer
 RUN /workspace/venv/bin/pip install --no-cache-dir \
     huggingface_hub>=0.21.4 \
     hf_transfer>=0.1.5
 
-# Install diffusers and related packages
+# Install diffusers and related packages with specific versions
 RUN /workspace/venv/bin/pip install --no-cache-dir \
-    diffusers>=0.27.2 \
+    diffusers==0.28.0 \
     transformers>=4.38.2 \
     accelerate>=0.27.2
 
-# Install onnxruntime and other ML packages
+# Install onnxruntime and other ML packages with specific versions
 RUN /workspace/venv/bin/pip install --no-cache-dir \
-    onnxruntime-gpu>=1.17.1 \
+    onnxruntime-gpu==1.18.0 \
     insightface>=0.7.3 \
     facexlib>=0.3.0 \
     typer>=0.9.0 \
     rich>=13.7.1 \
-    typing_extensions>=4.10.0
+    typing_extensions>=4.10.0 \
+    protobuf==3.20.2
 
 # Install ComfyUI and manager
 RUN git clone https://github.com/comfyanonymous/ComfyUI.git && \
