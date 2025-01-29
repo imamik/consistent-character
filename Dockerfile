@@ -4,7 +4,7 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 # Set working directory and environment variables
 ENV SHELL=/bin/bash
-ENV PYTHONUNBUFFERED=1
+ENV PYTHONUNBUFFERED=True
 ENV DEBIAN_FRONTEND=noninteractive
 
 WORKDIR /
@@ -53,7 +53,9 @@ RUN mkdir -p /workspace && \
 # Install Filebrowser
 # Create a non-root user for brew install
 RUN useradd -m brewuser && \
-    echo "brewuser ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
+    echo "brewuser ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers && \
+    mkdir -p /home/linuxbrew/.linuxbrew && \
+    chown -R brewuser:brewuser /home/linuxbrew/.linuxbrew
 # Switch to the non-root user
 USER brewuser
 RUN /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
