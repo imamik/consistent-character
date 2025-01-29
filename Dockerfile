@@ -41,7 +41,8 @@ RUN pip install --upgrade --no-cache-dir pip && \
 RUN pip install --upgrade --no-cache-dir torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu124
 
 # Install ComfyUI and ComfyUI Manager
-RUN cd /workspace && \
+RUN mkdir -p /workspace && \
+    cd /workspace && \
     git clone https://github.com/comfyanonymous/ComfyUI.git && \
     cd /workspace/ComfyUI && \
     pip install -r requirements.txt && \
@@ -67,9 +68,11 @@ USER root
 # NGINX Proxy
 COPY proxy/nginx.conf /etc/nginx/nginx.conf
 COPY proxy/readme.html /usr/share/nginx/html/readme.html
-
-# Copy the README.md
 COPY README.md /usr/share/nginx/html/README.md
+
+# Copy the ComfyUI data
+COPY models/ /workspace/ComfyUI/models/
+COPY input/ /workspace/ComfyUI/input/
 
 # Start Scripts
 COPY scripts/ /
