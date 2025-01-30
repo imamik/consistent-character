@@ -3,6 +3,8 @@
 export PYTHONUNBUFFERED=1
 source /venv/bin/activate
 
+mv /ComfyUI /workspace/ComfyUI
+
 cd /workspace/ComfyUI
 python main.py --listen --port 3000 &
 

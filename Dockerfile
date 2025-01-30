@@ -42,10 +42,8 @@ RUN pip install --upgrade --no-cache-dir pip && \
 RUN pip install --upgrade --no-cache-dir torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu124
 
 # Install ComfyUI and ComfyUI Manager
-RUN mkdir -p /workspace && \
-    cd /workspace && \
-    git clone https://github.com/comfyanonymous/ComfyUI.git && \
-    cd /workspace/ComfyUI && \
+RUN git clone https://github.com/comfyanonymous/ComfyUI.git && \
+    cd /ComfyUI && \
     pip install -r requirements.txt && \
     git clone https://github.com/ltdrdata/ComfyUI-Manager.git custom_nodes/ComfyUI-Manager && \
     cd custom_nodes/ComfyUI-Manager && \
@@ -74,7 +72,7 @@ COPY proxy/readme.html /usr/share/nginx/html/readme.html
 COPY README.md /usr/share/nginx/html/README.md
 
 # Copy the ComfyUI data
-COPY ComfyUI/ /workspace/ComfyUI/
+COPY ComfyUI/ /ComfyUI/
 
 # Start Scripts
 COPY scripts/ /
