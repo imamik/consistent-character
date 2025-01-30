@@ -1,10 +1,19 @@
 #!/bin/bash
 
 export PYTHONUNBUFFERED=1
-source /venv/bin/activate
 
-# Ensure workspace directory exists
+# Ensure workspace directories exist
 mkdir -p /workspace/ComfyUI
+mkdir -p /workspace/venv
+
+# Sync venv files
+if ! rsync -a /venv/ /workspace/venv/; then
+    echo "Error: Failed to sync venv files to workspace"
+    exit 1
+fi
+
+# Activate the workspace venv
+source /workspace/venv/bin/activate
 
 # Sync ComfyUI files
 if ! rsync -a --ignore-existing /ComfyUI/ /workspace/ComfyUI/; then
