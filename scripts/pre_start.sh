@@ -3,9 +3,16 @@
 export PYTHONUNBUFFERED=1
 source /venv/bin/activate
 
-mv /ComfyUI /workspace/ComfyUI
+# Ensure workspace directory exists
+mkdir -p /workspace/ComfyUI
 
-cd /workspace/ComfyUI
+# Sync ComfyUI files
+if ! rsync -a --ignore-existing /ComfyUI/ /workspace/ComfyUI/; then
+    echo "Error: Failed to sync ComfyUI files to workspace"
+    exit 1
+fi
+
+cd /workspace/ComfyUI || exit 1
 python main.py --listen --port 3000 &
 
 # Start model downloads in the background

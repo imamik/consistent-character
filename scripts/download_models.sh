@@ -28,13 +28,15 @@ download_model \
     "https://civitai.com/api/download/models/782002?type=Model&format=SafeTensor&size=full&fp=fp16" \
     "$WORKSPACE_PATH/checkpoints/juggernautXL_juggXIByRundiffusion.safetensors"
 
-# TODO: remove this exit
-exit 0
-
 # Photon model
 download_model \
     "https://civitai.com/api/download/models/90072?type=Model&format=SafeTensor&size=pruned&fp=fp16" \
     "$WORKSPACE_PATH/checkpoints/photon_v1.safetensors"
+
+# Flux1 model
+download_model \
+    "https://huggingface.co/Comfy-Org/flux1-dev/resolve/main/flux1-dev-fp8.safetensors" \
+    "$WORKSPACE_PATH/checkpoints/flux1-dev-fp8.safetensors"
 
 # UltraSharp upscaler
 download_model \
