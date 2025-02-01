@@ -39,7 +39,12 @@ ENV PATH="/venv/bin:$PATH"
 RUN pip install --upgrade --no-cache-dir pip && \
     pip install --upgrade setuptools && \
     pip install --upgrade wheel
-RUN pip install --upgrade --no-cache-dir torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu124
+
+# Install dependencies in the correct order
+RUN pip install --upgrade --no-cache-dir diffusers && \
+    pip install --upgrade --no-cache-dir huggingface_hub && \
+    pip install --upgrade --no-cache-dir torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu124 && \
+    pip install --upgrade --no-cache-dir xformers==0.0.29.post2
 
 # Install ComfyUI and ComfyUI Manager
 RUN git clone https://github.com/comfyanonymous/ComfyUI.git && \
@@ -48,6 +53,8 @@ RUN git clone https://github.com/comfyanonymous/ComfyUI.git && \
     git clone https://github.com/ltdrdata/ComfyUI-Manager.git custom_nodes/ComfyUI-Manager && \
     cd custom_nodes/ComfyUI-Manager && \
     pip install -r requirements.txt
+
+RUN scripts/install_custom_nodes.sh
 
 # Install Filebrowser
 # Create a non-root user for brew install
@@ -76,6 +83,6 @@ COPY ComfyUI/ /ComfyUI/
 
 # Start Scripts
 COPY scripts/ /
-RUN chmod +x /start.sh /pre_start.sh /download_models.sh
+RUN chmod +x /start.sh /pre_start.sh /download_models.sh /install_custom_nodes.sh
 
 CMD [ "/start.sh" ]
