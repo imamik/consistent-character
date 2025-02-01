@@ -54,8 +54,6 @@ RUN git clone https://github.com/comfyanonymous/ComfyUI.git && \
     cd custom_nodes/ComfyUI-Manager && \
     pip install -r requirements.txt
 
-RUN scripts/install_custom_nodes.sh
-
 # Install Filebrowser
 # Create a non-root user for brew install
 RUN useradd -m brewuser && \
@@ -84,5 +82,6 @@ COPY ComfyUI/ /ComfyUI/
 # Start Scripts
 COPY scripts/ /
 RUN chmod +x /start.sh /pre_start.sh /download_models.sh /install_custom_nodes.sh
+RUN /install_custom_nodes.sh
 
 CMD [ "/start.sh" ]
