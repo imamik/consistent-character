@@ -5,7 +5,8 @@ CUSTOM_NODES_PATH="/ComfyUI/custom_nodes"
 
 # Array of repositories to clone
 REPOS=(
-    "https://github.com/maepopi/Diffusers-in-ComfyUI.git"
+    "https://github.com/Limitex/ComfyUI-Diffusers.git"
+    "https://github.com/cumulo-autumn/StreamDiffusion.git"
     "https://github.com/huanngzh/ComfyUI-MVAdapter"
     "https://github.com/chrisgoringe/cg-use-everywhere"
     "https://github.com/cubiq/ComfyUI_IPAdapter_plus"
@@ -15,7 +16,6 @@ REPOS=(
     "https://github.com/rgthree/rgthree-comfy"
     "https://github.com/WASasquatch/was-node-suite-comfyui"
     "https://github.com/yolain/ComfyUI-Easy-Use"
-    "https://github.com/ssitu/ComfyUI_UltimateSDUpscale"
     "https://github.com/kijai/ComfyUI-Florence2"
     "https://github.com/kijai/ComfyUI-IC-Light"
     "https://github.com/kijai/ComfyUI-KJNodes"
@@ -29,6 +29,7 @@ REPOS=(
     "https://github.com/KoreTeknology/ComfyUI-Universal-Styler"
     "https://github.com/un-seen/comfyui-tensorops"
     "https://github.com/Vaibhavs10/ComfyUI-DDUF"
+    "https://github.com/ssitu/ComfyUI_UltimateSDUpscale"
 )
 
 # Function to install requirements if they exist
@@ -57,11 +58,11 @@ for repo in "${REPOS[@]}"; do
     if [ -d "$CUSTOM_NODES_PATH/$repo_name" ]; then
         echo "Directory $repo_name already exists, updating..."
         cd "$CUSTOM_NODES_PATH/$repo_name"
-        git pull
+        git pull --recurse-submodules
         cd ..
     else
         echo "Cloning $repo..."
-        git clone "$repo" "$CUSTOM_NODES_PATH/$repo_name"
+        git clone --recursive "$repo" "$CUSTOM_NODES_PATH/$repo_name"
     fi
     
     # Install requirements if they exist

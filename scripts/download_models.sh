@@ -126,4 +126,8 @@ download_model \
     "https://huggingface.co/h94/IP-Adapter/resolve/main/sdxl_models/ip-adapter-plus_sdxl_vit-h.safetensors" \
     "$WORKSPACE_PATH/ipadapter/ip-adapter-plus_sdxl_vit-h.safetensors"
 
+download_model \
+    "https://huggingface.co/lllyasviel/ic-light/resolve/main/iclight_sd15_fbc.safetensors" \
+    "$WORKSPACE_PATH/diffusion_models/IC-Light/iclight_sd15_fbc.safetensors"
+
 echo "All downloads completed!" 

@@ -46,6 +46,8 @@ RUN pip install --upgrade --no-cache-dir diffusers && \
     pip install --upgrade --no-cache-dir torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu124 && \
     pip install --upgrade --no-cache-dir xformers==0.0.29.post2
 
+RUN python -m streamdiffusion.tools.install-tensorrt
+
 # Install ComfyUI and ComfyUI Manager
 RUN git clone https://github.com/comfyanonymous/ComfyUI.git && \
     cd /ComfyUI && \
