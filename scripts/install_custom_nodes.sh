@@ -6,6 +6,7 @@ CUSTOM_NODES_PATH="/ComfyUI/custom_nodes"
 # Array of repositories to clone
 REPOS=(
     "https://github.com/Limitex/ComfyUI-Diffusers.git"
+    "https://github.com/cumulo-autumn/StreamDiffusion.git"
     "https://github.com/huanngzh/ComfyUI-MVAdapter"
     "https://github.com/chrisgoringe/cg-use-everywhere"
     "https://github.com/cubiq/ComfyUI_IPAdapter_plus"
@@ -61,7 +62,12 @@ for repo in "${REPOS[@]}"; do
         cd ..
     else
         echo "Cloning $repo..."
-        git clone --recursive "$repo" "$CUSTOM_NODES_PATH/$repo_name"
+        # Special handling for UltimateSDUpscale
+        if [[ "$repo_name" == "ComfyUI_UltimateSDUpscale" ]]; then
+            git clone --recursive "$repo" "$CUSTOM_NODES_PATH/$repo_name"
+        else
+            git clone "$repo" "$CUSTOM_NODES_PATH/$repo_name"
+        fi
     fi
     
     # Install requirements if they exist
