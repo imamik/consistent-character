@@ -41,10 +41,11 @@ RUN pip install --upgrade --no-cache-dir pip && \
     pip install --upgrade wheel
 
 # Install dependencies in the correct order with specific versions
-RUN pip install --upgrade --no-cache-dir "huggingface_hub>=0.28.1" && \
-    pip install --upgrade --no-cache-dir "diffusers[torch]>=0.32.2" && \
+RUN pip install --upgrade --no-cache-dir "huggingface_hub>=0.19.4" && \
+    pip install --upgrade --no-cache-dir "transformers>=4.36.0" && \
+    pip install --upgrade --no-cache-dir "diffusers[torch]>=0.24.0" && \
     pip install --upgrade --no-cache-dir torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu124 && \
-    pip install --upgrade --no-cache-dir xformers>=0.0.29.post2
+    pip install --upgrade --no-cache-dir xformers>=0.0.22.post7
 
 # Install StreamDiffusion dependencies first
 RUN pip install --upgrade --no-cache-dir tensorrt && \
