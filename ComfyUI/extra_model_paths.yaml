@@ -1,0 +1,3 @@
+comfyui:
+  base_path: /workspace/models/
+  is_default: true

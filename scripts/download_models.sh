@@ -1,12 +1,19 @@
 #!/bin/bash
 
 # Set workspace path
-WORKSPACE_PATH="/ComfyUI/models"
+WORKSPACE_PATH="/workspace/models"
 
 # Function to download file
 download_model() {
     local url="$1"
     local dest="$2"
+    
+    # Create directory if it doesn't exist
+    local dir=$(dirname "$dest")
+    if [ ! -d "$dir" ]; then
+        echo "Creating directory: $dir"
+        mkdir -p "$dir"
+    fi
     
     if [ -f "$dest" ]; then
         echo "Skipping $dest - already exists"
@@ -34,9 +41,9 @@ download_model \
     "$WORKSPACE_PATH/checkpoints/photon_v1.safetensors"
 
 # Flux1 model
-# download_model \
-#     "https://huggingface.co/Comfy-Org/flux1-dev/resolve/main/flux1-dev-fp8.safetensors" \
-#     "$WORKSPACE_PATH/checkpoints/flux1-dev-fp8.safetensors"
+download_model \
+    "https://huggingface.co/Comfy-Org/flux1-dev/resolve/main/flux1-dev-fp8.safetensors" \
+    "$WORKSPACE_PATH/checkpoints/flux1-dev-fp8.safetensors"
 
 # UltraSharp upscaler
 download_model \
