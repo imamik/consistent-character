@@ -51,10 +51,8 @@ RUN pip install --upgrade --no-cache-dir tensorrt && \
     pip install --upgrade --no-cache-dir nvidia-pyindex && \
     pip install --upgrade --no-cache-dir nvidia-tensorrt
 
-# Install StreamDiffusion
-RUN git clone https://github.com/cumulo-autumn/StreamDiffusion.git && \
-    cd StreamDiffusion && \
-    pip install -e .
+# Install StreamDiffusion with pip
+RUN pip install --upgrade --no-cache-dir streamdiffusion
 
 # Install TensorRT tools
 # RUN python -m streamdiffusion.tools.install-tensorrt

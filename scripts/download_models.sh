@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Set workspace path
-WORKSPACE_PATH="/workspace/ComfyUI/models"
+WORKSPACE_PATH="/ComfyUI/models"
 
 # Function to download file
 download_model() {
