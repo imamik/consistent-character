@@ -46,6 +46,10 @@ RUN pip install --upgrade --no-cache-dir diffusers && \
     pip install --upgrade --no-cache-dir torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu124 && \
     pip install --upgrade --no-cache-dir xformers==0.0.29.post2
 
+# Install StreamDiffusion
+RUN pip install git+https://github.com/cumulo-autumn/StreamDiffusion.git@main#egg=streamdiffusion[tensorrt]
+RUN python -m streamdiffusion.tools.install-tensorrt
+
 # Install ComfyUI and ComfyUI Manager
 RUN git clone https://github.com/comfyanonymous/ComfyUI.git && \
     cd /ComfyUI && \
@@ -82,8 +86,8 @@ COPY ComfyUI/ /ComfyUI/
 # Start Scripts
 COPY scripts/ /
 RUN chmod +x /start.sh /pre_start.sh /download_models.sh /install_custom_nodes.sh
+
 RUN /install_custom_nodes.sh
 
-RUN python -m streamdiffusion.tools.install-tensorrt
 
 CMD [ "/start.sh" ]
