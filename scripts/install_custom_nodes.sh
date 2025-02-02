@@ -29,6 +29,8 @@ REPOS=(
     "https://github.com/un-seen/comfyui-tensorops"
     "https://github.com/Vaibhavs10/ComfyUI-DDUF"
     "https://github.com/ssitu/ComfyUI_UltimateSDUpscale"
+    "https://github.com/lldacing/ComfyUI_PuLID_Flux_ll"
+    "https://github.com/sipie800/ComfyUI-PuLID-Flux-Enhanced"
 )
 
 # Function to install requirements if they exist

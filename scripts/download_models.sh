@@ -133,4 +133,12 @@ download_model \
     "https://huggingface.co/h94/IP-Adapter/resolve/main/sdxl_models/ip-adapter-plus_sdxl_vit-h.safetensors" \
     "$WORKSPACE_PATH/ipadapter/ip-adapter-plus_sdxl_vit-h.safetensors"
 
+# PuLID Models
+download_model \
+    "https://huggingface.co/guozinan/PuLID/blob/main/pulid_flux_v0.9.1.safetensors" \
+    "$WORKSPACE_PATH/pulid/pulid_flux_v0.9.1.safetensors"
+download_model \
+    "https://huggingface.co/guozinan/PuLID/blob/main/pulid_v1.1.safetensors" \
+    "$WORKSPACE_PATH/pulid/pulid_v1.1.safetensors"
+
 echo "All downloads completed!" 
