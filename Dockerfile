@@ -41,11 +41,10 @@ RUN pip install --upgrade --no-cache-dir pip && \
     pip install --upgrade wheel
 
 # Install dependencies in the correct order with specific versions
-RUN pip install --upgrade --no-cache-dir "huggingface_hub>=0.19.4" && \
-    pip install --upgrade --no-cache-dir "transformers>=4.36.0" && \
-    pip install --upgrade --no-cache-dir "diffusers[torch]>=0.24.0" && \
+RUN pip install --upgrade --no-cache-dir huggingface_hub && \
+    pip install --upgrade --no-cache-dir diffusers && \
     pip install --upgrade --no-cache-dir torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu124 && \
-    pip install --upgrade --no-cache-dir xformers>=0.0.22.post7
+    pip install --upgrade --no-cache-dir xformers
 
 # Install StreamDiffusion dependencies first
 RUN pip install --upgrade --no-cache-dir tensorrt && \
@@ -58,7 +57,7 @@ RUN git clone https://github.com/cumulo-autumn/StreamDiffusion.git && \
     pip install -e .
 
 # Install TensorRT tools
-RUN python -m streamdiffusion.tools.install-tensorrt
+# RUN python -m streamdiffusion.tools.install-tensorrt
 
 # Install ComfyUI and ComfyUI Manager
 RUN git clone https://github.com/comfyanonymous/ComfyUI.git && \
