@@ -48,7 +48,7 @@
                 ]
             },
             "writerOpts": {
-                "headerPartial": "# 🔖 ${version} (${date})\n\n## Docker Image\n\n```bash\n# Latest version\ndocker pull ghcr.io/imamik/consistent-character:${version}\n\n# Or use latest tag\ndocker pull ghcr.io/imamik/consistent-character:latest\n```\n\n## Changes\n"
+                "headerPartial": "# 🔖 {{version}} ({{date}})\n\n## Docker Image\n\n```bash\n# Latest version\ndocker pull ghcr.io/imamik/consistent-character:{{version}}\n\n# Or use latest tag\ndocker pull ghcr.io/imamik/consistent-character:latest\n```\n\n## Changes\n"
             }
         }],
         "@semantic-release/changelog",
