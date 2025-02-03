@@ -1,7 +1,7 @@
 FROM nvidia/cuda:12.4.1-base-ubuntu20.04 AS base
 
 # Add version argument and label
-ARG VERSION=dev
+ARG VERSION="dev"
 LABEL org.opencontainers.image.version=${VERSION}
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
@@ -10,6 +10,7 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 ENV SHELL=/bin/bash
 ENV PYTHONUNBUFFERED=True
 ENV DEBIAN_FRONTEND=noninteractive
+ENV VERSION=$VERSION
 
 WORKDIR /
 
@@ -100,5 +101,6 @@ RUN chmod +x /start.sh /pre_start.sh /download_models.sh /install_custom_nodes.s
 
 RUN /install_custom_nodes.sh
 
+RUN echo $VERSION > VERSION
 
 CMD [ "/start.sh" ]
