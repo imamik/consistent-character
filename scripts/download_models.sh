@@ -146,7 +146,7 @@ download_model \
 
 # PuLID Models
 download_model \
-    "https://huggingface.co/guozinan/PuLID/blob/main/pulid_v1.1.safetensors" \
+    "https://huggingface.co/guozinan/PuLID/resolve/main/pulid_v1.1.safetensors" \
     "$WORKSPACE_PATH/pulid/pulid_v1.1.safetensors"
 
 # Flux1 model
@@ -157,7 +157,7 @@ download_model \
     "https://huggingface.co/InstantX/FLUX.1-dev-Controlnet-Union/resolve/main/diffusion_pytorch_model.safetensors" \
     "$WORKSPACE_PATH/controlnet/FLUX.1/InstantX-FLUX1-Dev-Union/diffusion_pytorch_model.safetensors"
 download_model \
-    "https://huggingface.co/guozinan/PuLID/blob/main/pulid_flux_v0.9.1.safetensors" \
+    "https://huggingface.co/guozinan/PuLID/resolve/main/pulid_flux_v0.9.1.safetensors" \
     "$WORKSPACE_PATH/pulid/pulid_flux_v0.9.1.safetensors"
 
 # Wait for all background downloads to complete

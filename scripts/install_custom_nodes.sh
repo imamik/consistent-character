@@ -31,6 +31,11 @@ REPOS=(
     "https://github.com/ssitu/ComfyUI_UltimateSDUpscale"
     "https://github.com/lldacing/ComfyUI_PuLID_Flux_ll"
     "https://github.com/sipie800/ComfyUI-PuLID-Flux-Enhanced"
+    "https://github.com/Fannovel16/comfyui_controlnet_aux"
+    "https://github.com/cubiq/PuLID_ComfyUI"
+    "https://github.com/Kosinkadink/ComfyUI-Advanced-ControlNet"
+    "https://github.com/Derfuu/Derfuu_ComfyUI_ModdedNodes"
+    "https://github.com/city96/ComfyUI-GGUF"
 )
 
 # Function to install requirements if they exist
