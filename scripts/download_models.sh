@@ -3,6 +3,10 @@
 # Set workspace path
 WORKSPACE_PATH="/workspace/models"
 
+# Set maximum number of concurrent downloads
+MAX_CONCURRENT=5
+current_downloads=0
+
 # Function to download file
 download_model() {
     local url="$1"
@@ -20,11 +24,23 @@ download_model() {
         return
     fi
     
-    echo "Downloading $(basename "$dest")..."
-    wget --progress=bar:force:noscroll \
-         --show-progress \
-         -O "$dest" \
-         "$url"
+    # Wait if we've reached max concurrent downloads
+    while [ $current_downloads -ge $MAX_CONCURRENT ]; do
+        sleep 1
+        # Count current background processes
+        current_downloads=$(jobs -p | wc -l)
+    done
+    
+    # Increment counter and start download in background
+    ((current_downloads++))
+    (
+        echo "Downloading $(basename "$dest")..."
+        wget -q \
+             -O "$dest" \
+             "$url" && echo "Completed downloading $(basename "$dest")"
+        # Decrement counter when download finishes
+        ((current_downloads--))
+    ) &
 }
 
 # Download models one by one
@@ -143,5 +159,8 @@ download_model \
 download_model \
     "https://huggingface.co/guozinan/PuLID/blob/main/pulid_flux_v0.9.1.safetensors" \
     "$WORKSPACE_PATH/pulid/pulid_flux_v0.9.1.safetensors"
+
+# Wait for all background downloads to complete
+wait
 
 echo "All downloads completed!"
