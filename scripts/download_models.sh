@@ -40,11 +40,6 @@ download_model \
     "https://civitai.com/api/download/models/90072?type=Model&format=SafeTensor&size=pruned&fp=fp16" \
     "$WORKSPACE_PATH/checkpoints/photon_v1.safetensors"
 
-# Flux1 model
-download_model \
-    "https://huggingface.co/Comfy-Org/flux1-dev/resolve/main/flux1-dev-fp8.safetensors" \
-    "$WORKSPACE_PATH/checkpoints/flux1-dev-fp8.safetensors"
-
 # UltraSharp upscaler
 download_model \
     "https://huggingface.co/Kim2091/UltraSharp/resolve/main/4x-UltraSharp.pth" \
@@ -135,10 +130,18 @@ download_model \
 
 # PuLID Models
 download_model \
-    "https://huggingface.co/guozinan/PuLID/blob/main/pulid_flux_v0.9.1.safetensors" \
-    "$WORKSPACE_PATH/pulid/pulid_flux_v0.9.1.safetensors"
-download_model \
     "https://huggingface.co/guozinan/PuLID/blob/main/pulid_v1.1.safetensors" \
     "$WORKSPACE_PATH/pulid/pulid_v1.1.safetensors"
 
-echo "All downloads completed!" 
+# Flux1 model
+download_model \
+    "https://huggingface.co/Comfy-Org/flux1-dev/resolve/main/flux1-dev-fp8.safetensors" \
+    "$WORKSPACE_PATH/checkpoints/flux1-dev-fp8.safetensors"
+download_model \
+    "https://huggingface.co/InstantX/FLUX.1-dev-Controlnet-Union/resolve/main/diffusion_pytorch_model.safetensors" \
+    "$WORKSPACE_PATH/controlnet/FLUX.1/InstantX-FLUX1-Dev-Union/diffusion_pytorch_model.safetensors"
+download_model \
+    "https://huggingface.co/guozinan/PuLID/blob/main/pulid_flux_v0.9.1.safetensors" \
+    "$WORKSPACE_PATH/pulid/pulid_flux_v0.9.1.safetensors"
+
+echo "All downloads completed!"
