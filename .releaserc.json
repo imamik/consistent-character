@@ -2,14 +2,55 @@
     "branches": ["main"],
     "plugins": [
         ["@semantic-release/commit-analyzer", {
-            "preset": "angular",
+            "preset": "conventionalcommits",
             "releaseRules": [
                 { "type": "chore", "release": "patch" },
                 { "type": "refactor", "release": "patch" },
                 { "type": "style", "release": "patch" }
             ]
         }],
-        "@semantic-release/release-notes-generator",
+        ["@semantic-release/release-notes-generator", {
+            "preset": "conventionalcommits",
+            "presetConfig": {
+                "types": [
+                    {
+                        "type": "feat",
+                        "section": "🚀 Features",
+                        "hidden": false
+                    },
+                    {
+                        "type": "fix",
+                        "section": "🐛 Bug Fixes",
+                        "hidden": false
+                    },
+                    {
+                        "type": "chore",
+                        "section": "🔧 Maintenance",
+                        "hidden": false
+                    },
+                    {
+                        "type": "docs",
+                        "section": "📚 Documentation",
+                        "hidden": false
+                    },
+                    { "type": "style", "section": "💎 Style", "hidden": false },
+                    {
+                        "type": "refactor",
+                        "section": "♻️ Refactor",
+                        "hidden": false
+                    },
+                    {
+                        "type": "perf",
+                        "section": "⚡ Performance",
+                        "hidden": false
+                    },
+                    { "type": "test", "section": "🧪 Tests", "hidden": false }
+                ]
+            },
+            "writerOpts": {
+                "headerPartial": "# 🔖 ${version} (${date})\n\n## Docker Image\n\n```bash\n# Latest version\ndocker pull ghcr.io/imamik/consistent-character:${version}\n\n# Or use latest tag\ndocker pull ghcr.io/imamik/consistent-character:latest\n```\n\n## Changes\n"
+            }
+        }],
         "@semantic-release/changelog",
         ["@semantic-release/exec", {
             "prepareCmd": "echo ${nextRelease.version} > VERSION"
@@ -19,7 +60,7 @@
         }],
         ["@semantic-release/git", {
             "assets": ["CHANGELOG.md", "VERSION"],
-            "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
+            "message": "chore(release): 🔖 ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
         }]
     ]
 }
