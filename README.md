@@ -45,6 +45,29 @@ MickMumpitz's workflows out of the box on RunPod.
 3. Access ComfyUI through the provided URL
 4. Import MickMumpitz's workflows and start creating!
 
+## Docker Image
+
+The Docker image is available on GitHub Container Registry:
+
+```bash
+docker pull ghcr.io/imamik/consistent-character:latest
+```
+
+Available tags:
+
+- `latest` - Latest stable release
+- `vX.Y.Z` - Specific version releases (e.g., `v1.0.0`)
+- `sha-XXXXXXX` - Specific commit builds
+
+You can also reference the image directly in your RunPod template:
+
+```
+ghcr.io/imamik/consistent-character:latest
+```
+
+Each release is automatically built and published using GitHub Actions. The
+version number is managed through semantic versioning based on commit messages.
+
 ## Environment Variables
 
 - `JUPYTER_PASSWORD`: Set to enable Jupyter Lab (optional)
