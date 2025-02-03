@@ -42,13 +42,27 @@ jobs:
         id: semantic
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: npx semantic-release
+        run: |
+          RESULT=$(npx semantic-release)
+          VERSION=$(echo "$RESULT" | grep -oP "Published release \K[0-9]+\.[0-9]+\.[0-9]+" || echo "")
+          if [ ! -z "$VERSION" ]; then
+            echo "new_version=$VERSION" >> $GITHUB_OUTPUT
+            echo "new_release_published=true" >> $GITHUB_OUTPUT
+          else
+            echo "new_version=" >> $GITHUB_OUTPUT
+            echo "new_release_published=false" >> $GITHUB_OUTPUT
+          fi
 
-      - name: Verify release
+      - name: Verify Release
         if: steps.semantic.outputs.new_release_published == 'true'
         run: |
           echo "New version released: ${{ steps.semantic.outputs.new_version }}"
           echo "VERSION file content: $(cat VERSION)"
+
+      - name: Debug Semantic Release Outputs
+        run: |
+          echo "New version: ${{ steps.semantic.outputs.new_version }}"
+          echo "Release published: ${{ steps.semantic.outputs.new_release_published }}"
 
   build-and-push:
     needs: version-and-release
@@ -57,6 +71,13 @@ jobs:
       (github.event_name == 'pull_request' && github.event.pull_request.base.ref == 'main')
     runs-on: ubuntu-24.04
     steps:
+      - name: Debug Job Conditions
+        run: |
+          echo "Event name: ${{ github.event_name }}"
+          echo "Ref: ${{ github.ref }}"
+          echo "New version: ${{ needs.version-and-release.outputs.new_version }}"
+          echo "Release published: ${{ needs.version-and-release.outputs.new_release_published }}"
+
       - name: Checkout repository
         uses: actions/checkout@v4
 
@@ -82,8 +103,8 @@ jobs:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
             type=sha,format=long
-            type=raw,value=latest,enable={{is_default_branch}}
-            type=raw,value=${{ needs.version-and-release.outputs.new_version }},enable=${{ needs.version-and-release.outputs.new_release_published == 'true' }}
+            type=raw,value=latest,enable=${{ github.ref == 'refs/heads/main' }}
+            type=raw,value=${{ needs.version-and-release.outputs.new_version }},enable=${{ needs.version-and-release.outputs.new_version != '' }}
           labels: |
             org.opencontainers.image.title=${{ github.event.repository.name }}
             org.opencontainers.image.description=${{ github.event.repository.description }}
@@ -102,7 +123,7 @@ jobs:
           cache-to: type=gha,mode=max,scope=${{ github.workflow }}
           build-args: |
             BUILDKIT_INLINE_CACHE=1
-            VERSION=${{ needs.version-and-release.outputs.new_version }}
+            VERSION=${{ needs.version-and-release.outputs.new_version || 'dev' }}
           provenance: false
 
       - name: Set fallback version
