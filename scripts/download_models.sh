@@ -7,6 +7,11 @@ WORKSPACE_PATH="/workspace/models"
 MAX_CONCURRENT=5
 current_downloads=0
 
+# Color codes
+GREEN='\033[0;32m'
+RED='\033[0;31m'
+NC='\033[0m' # No Color
+
 # Function to download file
 download_model() {
     local url="$1"
@@ -20,7 +25,7 @@ download_model() {
     fi
     
     if [ -f "$dest" ]; then
-        echo "Skipping $dest - already exists"
+        echo -e "${GREEN}✅ Skipping $(basename "$dest") - already exists${NC}"
         return
     fi
     
@@ -35,9 +40,13 @@ download_model() {
     ((current_downloads++))
     (
         echo "Downloading $(basename "$dest")..."
-        wget -q \
-             -O "$dest" \
-             "$url" && echo "Completed downloading $(basename "$dest")"
+        if wget -q -O "$dest" "$url"; then
+            echo -e "${GREEN}✅ Completed downloading $(basename "$dest")${NC}"
+        else
+            echo -e "${RED}❌ Failed downloading $(basename "$dest")${NC}"
+            # Remove failed/incomplete download
+            rm -f "$dest"
+        fi
         # Decrement counter when download finishes
         ((current_downloads--))
     ) &
