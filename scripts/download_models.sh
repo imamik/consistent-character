@@ -158,6 +158,10 @@ download_model \
     "https://huggingface.co/guozinan/PuLID/resolve/main/pulid_v1.1.safetensors" \
     "$WORKSPACE_PATH/pulid/pulid_v1.1.safetensors"
 
+download_model \
+    "https://civitai.com/api/download/models/862920?type=Model&format=SafeTensor&size=full&fp=fp16" \
+    "$WORKSPACE_PATH/ipadapter/ip-adapter_pulid_sdxl_fp_16.safetensors"
+
 # Flux1 model
 download_model \
     "https://huggingface.co/Comfy-Org/flux1-dev/resolve/main/flux1-dev-fp8.safetensors" \
@@ -168,6 +172,27 @@ download_model \
 download_model \
     "https://huggingface.co/guozinan/PuLID/resolve/main/pulid_flux_v0.9.1.safetensors" \
     "$WORKSPACE_PATH/pulid/pulid_flux_v0.9.1.safetensors"
+
+# InstantID Antelopev2 models
+download_model \
+    "https://huggingface.co/MonsterMMORPG/tools/resolve/main/1k3d68.onnx" \
+    "$WORKSPACE_PATH/insightface/models/antelopev2/1k3d68.onnx"
+
+download_model \
+    "https://huggingface.co/MonsterMMORPG/tools/resolve/main/2d106det.onnx" \
+    "$WORKSPACE_PATH/insightface/models/antelopev2/2d106det.onnx"
+
+download_model \
+    "https://huggingface.co/MonsterMMORPG/tools/resolve/main/genderage.onnx" \
+    "$WORKSPACE_PATH/insightface/models/antelopev2/genderage.onnx"
+
+download_model \
+    "https://huggingface.co/MonsterMMORPG/tools/resolve/main/glintr100.onnx" \
+    "$WORKSPACE_PATH/insightface/models/antelopev2/glintr100.onnx"
+
+download_model \
+    "https://huggingface.co/MonsterMMORPG/tools/resolve/main/scrfd_10g_bnkps.onnx" \
+    "$WORKSPACE_PATH/insightface/models/antelopev2/scrfd_10g_bnkps.onnx"
 
 # Wait for all background downloads to complete
 wait
