@@ -7,11 +7,6 @@ WORKSPACE_PATH="/workspace/models"
 MAX_CONCURRENT=5
 current_downloads=0
 
-# Color codes
-GREEN='\033[0;32m'
-RED='\033[0;31m'
-NC='\033[0m' # No Color
-
 # Function to download file
 download_model() {
     local url="$1"
@@ -25,7 +20,7 @@ download_model() {
     fi
     
     if [ -f "$dest" ]; then
-        echo -e "${GREEN}✅ Skipping $(basename "$dest") - already exists${NC}"
+        echo "✅ Skipping $(basename "$dest") - already exists"
         return
     fi
     
@@ -41,9 +36,9 @@ download_model() {
     (
         echo "Downloading $(basename "$dest")..."
         if wget -q -O "$dest" "$url"; then
-            echo -e "${GREEN}✅ Completed downloading $(basename "$dest")${NC}"
+            echo "✅ Completed downloading $(basename "$dest")"
         else
-            echo -e "${RED}❌ Failed downloading $(basename "$dest")${NC}"
+            echo "❌ Failed downloading $(basename "$dest")"
             # Remove failed/incomplete download
             rm -f "$dest"
         fi
@@ -95,6 +90,10 @@ download_model \
     "$WORKSPACE_PATH/clip_vision/CLIP-ViT-bigG-14-laion2B-39B-b160k.safetensors"
 
 # IP-Adapter Models
+download_model \
+    "https://huggingface.co/TheMistoAI/MistoLine/resolve/main/mistoLine_rank256.safetensors?download=true" \
+    "$WORKSPACE_PATH/controlnet/mistoLine_rank256.safetensors"
+
 download_model \
     "https://huggingface.co/h94/IP-Adapter/resolve/main/models/ip-adapter_sd15.safetensors" \
     "$WORKSPACE_PATH/ipadapter/ip-adapter_sd15.safetensors"
@@ -159,8 +158,8 @@ download_model \
     "$WORKSPACE_PATH/pulid/pulid_v1.1.safetensors"
 
 download_model \
-    "https://civitai.com/api/download/models/862920?type=Model&format=SafeTensor&size=full&fp=fp16" \
-    "$WORKSPACE_PATH/ipadapter/ip-adapter_pulid_sdxl_fp_16.safetensors"
+    "https://huggingface.co/huchenlei/ipadapter_pulid/resolve/main/ip-adapter_pulid_sdxl_fp16.safetensors?download=true" \
+    "$WORKSPACE_PATH/pulid/ip-adapter_pulid_sdxl_fp_16.safetensors"
 
 # Flux1 model
 download_model \

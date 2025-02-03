@@ -1,5 +1,9 @@
 FROM nvidia/cuda:12.4.1-base-ubuntu20.04 AS base
 
+# Add version argument and label
+ARG VERSION=dev
+LABEL org.opencontainers.image.version=${VERSION}
+
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 # Set working directory and environment variables
