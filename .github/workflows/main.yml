@@ -58,7 +58,7 @@ jobs:
     if: |
       (github.event_name == 'push' && github.ref == 'refs/heads/main' && needs.determine-version.outputs.should_release == 'true') ||
       (github.event_name == 'pull_request' && github.event.pull_request.base.ref == 'main')
-    runs-on: ubuntu-24.04
+    runs-on: LargerRunner
     steps:
       - name: Debug Job Conditions
         run: |

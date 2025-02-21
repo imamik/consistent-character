@@ -54,7 +54,7 @@ To run the environment locally:
 
 ```bash
 # Pull the image
-docker pull ghcr.io/imamik/consistent-character:latest
+docker pull ghcr.io/joyandmighty/consistent-character:latest
 
 # Run the container
 docker run -it --gpus all \
@@ -64,7 +64,7 @@ docker run -it --gpus all \
   -v /path/to/your/inputs:/workspace/input \
   -v /path/to/your/outputs:/workspace/output \
   -v /path/to/your/models:/workspace/models \
-  ghcr.io/imamik/consistent-character:latest
+  ghcr.io/joyandmighty/consistent-character:latest
 
 # Access ComfyUI at http://localhost:3000
 # Access file browser at http://localhost:4040
@@ -79,7 +79,7 @@ models directories.
 The Docker image is available on GitHub Container Registry:
 
 ```bash
-docker pull ghcr.io/imamik/consistent-character:latest
+docker pull ghcr.io/joyandmighty/consistent-character:latest
 ```
 
 Available tags:
@@ -91,7 +91,7 @@ Available tags:
 You can also reference the image directly in your cloud platform template:
 
 ```
-ghcr.io/imamik/consistent-character:latest
+ghcr.io/joyandmighty/consistent-character:latest
 ```
 
 Each release is automatically built and published using GitHub Actions. The

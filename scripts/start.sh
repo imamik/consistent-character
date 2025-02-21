@@ -60,7 +60,7 @@ setup_ssh() {
 |                                                                          |
 |$(center_text "CONSISTENT CHARACTER SETUP")|
 |                                                                          |
-|  $(format_text "https://github.com/imamik/consistent-character" 65)|
+|  $(format_text "https://github.com/joyandmighty/consistent-character" 65)|
 |                                                                          |
 |  Version: $(format_version)                                              |
 |                                                                          |
